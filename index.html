@@ -1,16 +1,1149 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2316a34a'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>SkillSetu | Academia-Industry Collaboration Portal - AIIA</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  </head>
-  <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 font-['Plus_Jakarta_Sans'] antialiased">
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkillSetu | National Academia-Industry Collaboration & Skill Mapping Platform</title>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Outfit"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    h1, h2, h3, h4, h5, h6, .font-display { font-family: 'Outfit', sans-serif; }
+    .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+  </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors duration-200 antialiased selection:bg-emerald-500 selection:text-white">
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+  <!-- Modal Overlay Container -->
+  <div id="modal-container" class="fixed inset-0 z-50 hidden bg-slate-950/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"></div>
+
+  <!-- Top Ribbon -->
+  <header class="bg-gradient-to-r from-emerald-950 via-teal-950 to-slate-950 text-emerald-100 text-xs px-4 py-1.5 flex items-center justify-between border-b border-emerald-900/40 shrink-0">
+    <div class="flex items-center space-x-3">
+      <span class="font-bold tracking-wider flex items-center gap-1.5">
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        NATIONAL ACADEMIA–INDUSTRY COLLABORATION PLATFORM
+      </span>
+      <span class="hidden md:inline text-emerald-400/60">|</span>
+      <span class="hidden md:inline text-emerald-200">All India Institute of Ayurveda (AIIA)</span>
+    </div>
+    <div class="flex items-center space-x-3 text-[11px]">
+      <span class="bg-emerald-800/60 px-2 py-0.5 rounded border border-emerald-600/40 text-emerald-200 font-semibold">
+        Problem Statement ID: 26044
+      </span>
+      <span class="hidden sm:inline text-emerald-300 font-medium">Smart Automation</span>
+    </div>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav class="sticky top-0 z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm shrink-0">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <div onclick="navigateTo('dashboard')" class="flex items-center space-x-3 cursor-pointer select-none">
+        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-emerald-600 via-teal-600 to-amber-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20">
+          <i data-lucide="shield-check" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <div class="flex items-center space-x-1.5">
+            <span class="font-bold text-lg tracking-tight text-slate-900 dark:text-white font-display">SkillSetu</span>
+            <span class="text-xs font-bold px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300">
+              PORTAL
+            </span>
+          </div>
+          <p class="text-[10px] text-slate-500 dark:text-slate-400 font-medium leading-none">
+            Academia-Industry Collaboration & Skill Mapping Engine
+          </p>
+        </div>
+      </div>
+
+      <!-- Center / Admin Inspector Mode Switcher (If Admin) -->
+      <div id="nav-admin-inspector" class="hidden md:flex items-center space-x-2"></div>
+
+      <!-- Right Header Actions -->
+      <div class="flex items-center space-x-3">
+        <!-- Theme Toggle -->
+        <button onclick="toggleDarkMode()" title="Toggle Dark/Light Mode" class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+          <i data-lucide="moon" class="w-4 h-4 hidden dark:block"></i>
+          <i data-lucide="sun" class="w-4 h-4 block dark:hidden"></i>
+        </button>
+
+        <!-- User Profile Pill / Sign Out -->
+        <div id="nav-user-area" class="flex items-center space-x-2"></div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main App Layout (Sidebar + Content Viewport) -->
+  <div id="app-root" class="flex-1 flex w-full">
+    <!-- Dynamic Viewport Rendered by JS -->
+  </div>
+
+  <!-- Global Footer -->
+  <footer class="py-4 text-center text-xs text-slate-500 dark:text-slate-400 border-t border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 backdrop-blur-md shrink-0">
+    © 2026 All India Institute of Ayurveda (AIIA) • National Collaboration & Skill Mapping Framework
+  </footer>
+
+  <!-- Application Logic (Vanilla JS) -->
+  <script>
+    // =========================================================================
+    // 1. DATA STATE & PERSISTENT DATABASE ENGINE
+    // =========================================================================
+    const DEFAULT_DATA = {
+      currentUser: null,
+      effectiveRoleView: 'student',
+      activeTab: 'dashboard',
+      selectedDomainFilter: 'ALL',
+      users: [
+        {
+          id: 'STU-2026-8841',
+          role: 'student',
+          name: 'Aarav Sharma',
+          email: 'student@aiia.gov.in',
+          password: 'student123',
+          institute: 'All India Institute of Ayurveda (AIIA), New Delhi',
+          department: 'Dravyaguna & Pharmaceutical Sciences',
+          year: 'Final Year (BAMS / M.Sc Ayur-Biotech)',
+          rollNumber: 'AIIA-2022-BAMS-042',
+          targetRole: 'Ayurvedic R&D Formulation Scientist / Clinical Research Associate',
+          cgpa: '8.92 / 10',
+          skillScore: 82,
+          readinessLevel: 'High',
+          status: 'Active',
+          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80',
+          skills: [
+            { name: "Phytochemistry & Extraction", score: 88, level: "Advanced", verified: true },
+            { name: "HPLC / GC-MS Profiling", score: 82, level: "Advanced", verified: true },
+            { name: "Pharmacopoeia Standardization", score: 92, level: "Expert", verified: true },
+            { name: "Clinical Trial Protocols (GCP)", score: 75, level: "Intermediate", verified: true },
+            { name: "AI Molecular Docking / In-silico", score: 60, level: "Intermediate", verified: false },
+            { name: "Scientific Writing & Biostatistics", score: 68, level: "Intermediate", verified: true },
+            { name: "Regulatory Compliance (GLP/GMP)", score: 72, level: "Intermediate", verified: false }
+          ],
+          certificates: [
+            { id: "CERT-01", title: "Standardization of Herbal Formulations (GLP/GMP)", issuer: "AIIA National Certification Board", date: "Jan 2026", hash: "0x8f2d4e89a1c03b6e82f1b4a90cd7e51f", verified: true },
+            { id: "CERT-02", title: "Phytochemical Chromatography & Mass Spec", issuer: "CSIR India", date: "Nov 2025", hash: "0x3b1c90ef4a5d6e7189c2fa4b910de832", verified: true },
+            { id: "CERT-03", title: "Good Clinical Practice (GCP) for Clinical Trials", issuer: "Clinical Development Services Agency (CDSA)", date: "Sep 2025", hash: "0x91dae340cf88921a41b52c08ea394df1", verified: true }
+          ],
+          courses: [
+            { title: "Modern Extraction Methodologies & Supercritical CO2", platform: "AIIA National Digital Lab", duration: "6 Weeks", grade: "A+ (94%)" },
+            { title: "HPLC / HPTLC Chromatographic Fingerprinting Pro", platform: "Waters Analytical Academy", duration: "4 Weeks", grade: "Distinction (91%)" }
+          ]
+        },
+        {
+          id: 'FAC-1049',
+          role: 'faculty',
+          name: 'Dr. Sunita Varma',
+          email: 'faculty@aiia.gov.in',
+          password: 'faculty123',
+          institute: 'All India Institute of Ayurveda (AIIA), New Delhi',
+          department: 'Dravyaguna & Phytopharmacy',
+          designation: 'Associate Professor',
+          expertise: 'Standardization of Formulations, HPLC/GC-MS, Clinical Phase II Trials',
+          experience: '14 Years Teaching & 8 Years Research',
+          publicationsCount: 38,
+          patentsCount: 3,
+          avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80'
+        },
+        {
+          id: 'IND-5082',
+          role: 'industry',
+          name: 'Dabur Research & Development Foundation',
+          contactPerson: 'Dr. Vikramaditya Nair (Chief Scientific Officer)',
+          email: 'recruitment@dabur-rnd.com',
+          password: 'industry123',
+          sector: 'Ayurvedic FMCG & Healthcare Biotechnology',
+          location: 'Ghaziabad & Delhi NCR, India',
+          activePostings: 8,
+          applicantsCount: 142,
+          avatar: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=150&auto=format&fit=crop&q=80'
+        },
+        {
+          id: 'INST-001',
+          role: 'institution',
+          name: 'All India Institute of Ayurveda (AIIA)',
+          adminName: 'Prof. (Dr.) Anand Kulkarni',
+          email: 'tpo@aiia.gov.in',
+          password: 'tpo123',
+          department: 'Directorate of Training, Placements & Industry Collaboration',
+          accreditationScore: 'NAAC A++ / NIRF Top 10',
+          location: 'New Delhi, India',
+          avatar: 'https://images.unsplash.com/photo-1562774053-701939374585?w=150&auto=format&fit=crop&q=80'
+        },
+        {
+          id: 'ADM-001',
+          role: 'admin',
+          name: 'Dr. Rajeshwar Sharma',
+          email: 'admin@ayush.gov.in',
+          password: 'admin123',
+          designation: 'Chief Director & System Administrator',
+          department: 'National Skill & Institutional Accreditation Directorate',
+          organization: 'National Skill Directorate',
+          avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&auto=format&fit=crop&q=80'
+        }
+      ],
+      opportunities: [
+        { id: "OPP-101", title: "Formulation R&D Intern (Phytochemistry)", company: "Dabur Research Foundation", domain: "Formulation & Analytical", type: "Internship (6 Months)", location: "Delhi NCR", stipend: "₹25,000 / month", openings: 5, skills: ["Phytochemistry & Extraction", "HPLC / GC-MS Profiling"], description: "Hands-on formulation optimization, stability testing, and standardized botanical extract development." },
+        { id: "OPP-102", title: "Clinical Research Associate (GCP Trials)", company: "Himalaya Wellness Company", domain: "Clinical Trials & GCP", type: "Full-Time Placement", location: "Bengaluru", stipend: "₹6.5 - 8.0 LPA", openings: 3, skills: ["Clinical Trial Protocols (GCP)", "Regulatory Compliance"], description: "Monitor Phase II/III randomized controlled clinical trials in accordance with GCP and DCGI guidelines." },
+        { id: "OPP-103", title: "Computational In-Silico Research Scholar", company: "Patanjali Research Institute", domain: "Computational In-Silico", type: "Research Fellowship", location: "Haridwar", stipend: "₹35,000 / month", openings: 4, skills: ["AI Molecular Docking", "Phytochemistry & Extraction"], description: "Screen high-throughput botanical chemical libraries against anti-inflammatory and metabolic targets." },
+        { id: "OPP-104", title: "QA & Good Manufacturing Practice (GMP) Auditor", company: "Baidyanath Research Labs", domain: "QA & Compliance", type: "Full-Time Placement", location: "Nagpur", stipend: "₹5.8 - 7.2 LPA", openings: 2, skills: ["Pharmacopoeia Standardization", "Regulatory Compliance"], description: "Perform batch record reviews, cleanroom validation, and Schedule T audits." },
+        { id: "OPP-105", title: "Herbal Cosmeceuticals & Dermato-Care Trainee", company: "Emami Natural Healthcare", domain: "Herbal Cosmeceuticals", type: "Internship (3 Months)", location: "Kolkata", stipend: "₹22,000 / month", openings: 6, skills: ["Phytochemistry & Extraction", "Formulation Science"], description: "Develop novel polyherbal cosmetic emulsions, sunscreen SPF assays, and safety profiling." },
+        { id: "OPP-106", title: "Nutraceuticals & Dietary Formulator", company: "Patanjali Foods R&D", domain: "Nutraceuticals & Diet", type: "Full-Time Placement", location: "Delhi NCR", stipend: "₹7.0 - 9.2 LPA", openings: 4, skills: ["Phytochemistry & Extraction", "Pharmacopoeia Standardization"], description: "Formulate functional dietary supplements and fortified botanicals complying with FSSAI regulations." },
+        { id: "OPP-107", title: "Phytopharmaceutical Analytical Chemist", company: "Waters India Analytical Center", domain: "Formulation & Analytical", type: "Full-Time Placement", location: "Bengaluru", stipend: "₹8.0 - 10.5 LPA", openings: 3, skills: ["HPLC / GC-MS Profiling", "Regulatory Compliance"], description: "Operate ultra-performance LC-MS/MS systems for pesticide residue and heavy metal quantification." },
+        { id: "OPP-108", title: "Hospital Quality & NABH Auditor", company: "AIIA Clinical Hospital Services", domain: "Hospital Admin", type: "Internship (6 Months)", location: "New Delhi", stipend: "₹28,000 / month", openings: 3, skills: ["Regulatory Compliance", "Clinical Trial Protocols (GCP)"], description: "Implement clinical audit checklists and patient safety protocols for NABH accreditation." }
+      ],
+      lectures: [
+        { id: "LEC-01", title: "Advanced Phytochemical HPLC & Spectral Fingerprinting", speaker: "Dr. Sunita Varma", designation: "Associate Professor, AIIA", date: "Oct 15, 2026", attendees: 142, allowedRoles: ["student", "faculty", "industry"] },
+        { id: "LEC-02", title: "Good Clinical Practice (GCP) Compliance & EDC Audits", speaker: "Prof. (Dr.) Anand Kulkarni", designation: "AIIA Placement & Research Directorate", date: "Oct 22, 2026", attendees: 210, allowedRoles: ["student", "faculty", "institution"] }
+      ],
+      applications: [],
+      sabbaticals: [
+        { id: "SABB-01", title: "Industrial Phytopharmaceutical Residency", company: "Dabur R&D", location: "Ghaziabad", duration: "2 Months", fellowship: "National Research Fellowship Scheme" },
+        { id: "SABB-02", title: "Advanced Analytical Chromatography Residency", company: "Waters India Labs", location: "Bengaluru", duration: "6 Weeks", fellowship: "₹75,000 Grant" }
+      ]
+    };
+
+    let state = JSON.parse(localStorage.getItem('skillsetu_rich_state')) || DEFAULT_DATA;
+
+    function saveState() {
+      localStorage.setItem('skillsetu_rich_state', JSON.stringify(state));
+    }
+
+    // =========================================================================
+    // 2. UI UTILITIES & TOASTS
+    // =========================================================================
+    function showToast(title, message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const bgColors = {
+        success: 'bg-emerald-600 text-white shadow-emerald-600/30',
+        error: 'bg-red-600 text-white shadow-red-600/30',
+        info: 'bg-indigo-600 text-white shadow-indigo-600/30'
+      };
+
+      toast.className = `p-4 rounded-2xl shadow-xl pointer-events-auto transition transform duration-300 translate-y-2 opacity-0 flex items-start space-x-3 text-xs ${bgColors[type] || bgColors.success}`;
+      toast.innerHTML = `
+        <div class="mt-0.5"><i data-lucide="${type === 'error' ? 'alert-circle' : type === 'info' ? 'info' : 'check-circle-2'}" class="w-4 h-4"></i></div>
+        <div class="space-y-0.5">
+          <p class="font-bold text-sm leading-tight">${title}</p>
+          <p class="text-xs opacity-90">${message}</p>
+        </div>
+      `;
+
+      container.appendChild(toast);
+      lucide.createIcons();
+      setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    function toggleDarkMode() {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    }
+    if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark');
+
+    function navigateTo(tab) {
+      state.activeTab = tab;
+      saveState();
+      render();
+    }
+
+    function switchAdminInspector(role) {
+      if (state.currentUser?.role !== 'admin') return;
+      state.effectiveRoleView = role;
+      state.activeTab = 'dashboard';
+      saveState();
+      showToast("Inspector Mode Switched", `Viewing ${role.toUpperCase()} portal as Super-Admin.`, "info");
+      render();
+    }
+
+    function loginUser(email, password) {
+      const user = state.users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
+      if (user) {
+        state.currentUser = user;
+        state.effectiveRoleView = user.role;
+        state.activeTab = 'dashboard';
+        saveState();
+        showToast("Signed In Successfully", `Welcome, ${user.name}!`);
+        confetti({ particleCount: 50, spread: 60, origin: { y: 0.8 } });
+        render();
+      } else {
+        showToast("Authentication Failed", "Invalid email or password.", "error");
+      }
+    }
+
+    function logoutUser() {
+      state.currentUser = null;
+      state.effectiveRoleView = 'student';
+      state.activeTab = 'dashboard';
+      saveState();
+      showToast("Signed Out", "You have securely logged out.", "info");
+      render();
+    }
+
+    function quickDemoLogin(role) {
+      const user = state.users.find(u => u.role === role);
+      if (user) {
+        state.currentUser = user;
+        state.effectiveRoleView = role;
+        state.activeTab = 'dashboard';
+        saveState();
+        showToast("Demo Login Active", `Signed in as ${user.name} (${role.toUpperCase()})`);
+        confetti({ particleCount: 40, spread: 50, origin: { y: 0.8 } });
+        render();
+      }
+    }
+
+    // =========================================================================
+    // 3. MAIN RENDERER & ROUTER
+    // =========================================================================
+    function render() {
+      renderNav();
+      const appRoot = document.getElementById('app-root');
+
+      if (!state.currentUser) {
+        appRoot.innerHTML = renderAuthView();
+      } else {
+        appRoot.innerHTML = `
+          <!-- Sidebar -->
+          ${renderSidebar()}
+          
+          <!-- Content Viewport -->
+          <main class="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto max-w-7xl w-full mx-auto space-y-6">
+            ${renderActiveTabContent()}
+          </main>
+        `;
+      }
+
+      lucide.createIcons();
+    }
+
+    function renderNav() {
+      const navArea = document.getElementById('nav-user-area');
+      const adminInspector = document.getElementById('nav-admin-inspector');
+
+      if (!state.currentUser) {
+        adminInspector.innerHTML = '';
+        navArea.innerHTML = `
+          <button onclick="render()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition flex items-center gap-1.5">
+            <i data-lucide="log-in" class="w-3.5 h-3.5"></i>
+            <span>Sign In / Register</span>
+          </button>
+        `;
+      } else {
+        const u = state.currentUser;
+        if (u.role === 'admin') {
+          adminInspector.innerHTML = `
+            <div class="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-bold">
+              <span class="text-[10px] uppercase text-slate-400 px-2 flex items-center gap-1">
+                <i data-lucide="eye" class="w-3 h-3 text-red-500"></i> Inspector:
+              </span>
+              ${['student', 'faculty', 'industry', 'institution', 'admin'].map(r => `
+                <button onclick="switchAdminInspector('${r}')" class="px-2.5 py-1 rounded-lg transition text-[11px] ${state.effectiveRoleView === r ? 'bg-red-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'}">
+                  ${r.toUpperCase()}
+                </button>
+              `).join('')}
+            </div>
+          `;
+        } else {
+          adminInspector.innerHTML = '';
+        }
+
+        navArea.innerHTML = `
+          <div class="flex items-center space-x-3 bg-slate-100 dark:bg-slate-800 p-1.5 pr-3 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <img src="${u.avatar}" class="w-8 h-8 rounded-xl object-cover border border-slate-300 dark:border-slate-600">
+            <div class="hidden sm:block text-left">
+              <p class="text-xs font-bold leading-tight text-slate-800 dark:text-slate-100">${u.name}</p>
+              <span class="text-[10px] font-extrabold uppercase px-1.5 py-0.2 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300">${state.effectiveRoleView}</span>
+            </div>
+            <button onclick="logoutUser()" title="Sign Out" class="p-1.5 rounded-lg hover:bg-red-100 dark:hover:bg-red-950/60 text-slate-500 hover:text-red-600 transition">
+              <i data-lucide="log-out" class="w-4 h-4"></i>
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    // =========================================================================
+    // 4. SIDEBAR NAVIGATION
+    // =========================================================================
+    function renderSidebar() {
+      const role = state.effectiveRoleView;
+      const tab = state.activeTab;
+
+      let menu = [];
+      if (role === 'student') {
+        menu = [
+          { id: 'dashboard', label: 'Career & Skill Dashboard', icon: 'layout-dashboard' },
+          { id: 'assessment', label: 'AI Diagnostic Assessment', icon: 'compass', badge: 'Quiz' },
+          { id: 'opportunities', label: 'Internships & Jobs', icon: 'briefcase', badge: `${state.opportunities.length}` },
+          { id: 'profile-manager', label: 'My Skills & Credentials', icon: 'award', badge: 'CRUD' },
+          { id: 'portfolio', label: 'Verifiable Portfolio', icon: 'shield-check', badge: 'Proof' },
+          { id: 'applications', label: 'Application Tracker', icon: 'layers', badge: `${state.applications.length}` }
+        ];
+      } else if (role === 'faculty') {
+        menu = [
+          { id: 'dashboard', label: 'Faculty Overview', icon: 'layout-dashboard' },
+          { id: 'expert-lectures', label: 'Publish Masterclasses', icon: 'video', badge: 'Publish' },
+          { id: 'faculty-internships', label: 'Industrial Sabbaticals', icon: 'building-2', badge: 'Fellowship' },
+          { id: 'research-rfp', label: 'Joint Research RFPs', icon: 'flask-conical', badge: 'Active' },
+          { id: 'opportunities', label: 'Explore Openings', icon: 'briefcase' }
+        ];
+      } else if (role === 'industry') {
+        menu = [
+          { id: 'dashboard', label: 'Recruiter Dashboard', icon: 'layout-dashboard' },
+          { id: 'post-opportunity', label: 'Post Opportunity', icon: 'plus-circle', badge: 'New' },
+          { id: 'candidate-matcher', label: 'AI Candidate Matcher', icon: 'sparkles', badge: 'ATS' },
+          { id: 'opportunities', label: 'Manage Openings', icon: 'briefcase' }
+        ];
+      } else if (role === 'institution') {
+        menu = [
+          { id: 'dashboard', label: 'Placement Readiness (PRI)', icon: 'layout-dashboard', badge: 'Live' },
+          { id: 'compliance-export', label: 'NAAC / NIRF Exporter', icon: 'file-spreadsheet', badge: 'Export' },
+          { id: 'opportunities', label: 'Corporate Openings', icon: 'briefcase' }
+        ];
+      } else {
+        menu = [
+          { id: 'dashboard', label: 'Directorate Overview', icon: 'layout-dashboard', badge: 'Admin' },
+          { id: 'user-management', label: 'User Provisioning Hub', icon: 'user-plus', badge: `${state.users.length}` },
+          { id: 'compliance-export', label: 'Accreditation Reports', icon: 'file-spreadsheet' },
+          { id: 'opportunities', label: 'National Openings', icon: 'briefcase' }
+        ];
+      }
+
+      return `
+        <aside class="w-64 shrink-0 hidden md:flex flex-col justify-between bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 p-4 min-h-[calc(100vh-4rem)]">
+          <div class="space-y-4">
+            <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700/80 text-xs">
+              <span class="text-[10px] font-bold uppercase text-slate-400 block">Active Portal Mode</span>
+              <span class="font-extrabold text-slate-900 dark:text-white">${role.toUpperCase()} PORTAL</span>
+            </div>
+
+            <nav class="space-y-1">
+              ${menu.map(item => `
+                <button onclick="navigateTo('${item.id}')" class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition ${tab === item.id ? 'bg-emerald-600 text-white shadow-sm' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'}">
+                  <div class="flex items-center space-x-2.5">
+                    <i data-lucide="${item.icon}" class="w-4 h-4"></i>
+                    <span>${item.label}</span>
+                  </div>
+                  ${item.badge ? `<span class="text-[9px] px-1.5 py-0.2 rounded font-extrabold ${tab === item.id ? 'bg-emerald-700 text-white' : 'bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300'}">${item.badge}</span>` : ''}
+                </button>
+              `).join('')}
+            </nav>
+          </div>
+
+          <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-800 text-[11px] text-slate-500 space-y-1">
+            <div class="flex items-center gap-1.5 font-bold text-slate-700 dark:text-slate-300">
+              <i data-lucide="server" class="w-3.5 h-3.5 text-emerald-500"></i> Local DB Storage Active
+            </div>
+            <p class="text-[10px] leading-tight">All profiles, skills & applications saved.</p>
+          </div>
+        </aside>
+      `;
+    }
+
+    // =========================================================================
+    // 5. TAB VIEW RENDERERS
+    // =========================================================================
+    function renderActiveTabContent() {
+      const tab = state.activeTab;
+      const role = state.effectiveRoleView;
+      const u = state.currentUser;
+
+      if (tab === 'opportunities') return renderOpportunitiesExplorer();
+      if (tab === 'profile-manager') return renderProfileManager();
+      if (tab === 'portfolio') return renderDigitalPortfolio();
+      if (tab === 'assessment') return renderDiagnosticAssessment();
+      if (tab === 'compliance-export') return renderComplianceExporter();
+      if (tab === 'user-management') return renderUserManagement();
+      if (tab === 'expert-lectures') return renderExpertLectures();
+      if (tab === 'faculty-internships') return renderFacultyInternships();
+
+      // Default: Role Dashboard
+      return renderRoleDashboard();
+    }
+
+    function renderRoleDashboard() {
+      const u = state.currentUser;
+      const role = state.effectiveRoleView;
+
+      return `
+        <div class="space-y-6">
+          <!-- Hero Header -->
+          <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-r ${getRoleGradient(role)} text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div class="space-y-2 max-w-2xl">
+              <div class="inline-flex items-center space-x-2 px-3 py-0.5 rounded-full bg-white/20 border border-white/30 text-white text-xs font-bold">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                <span>${role.toUpperCase()} PORTAL DASHBOARD</span>
+              </div>
+              <h1 class="text-2xl sm:text-3xl font-extrabold font-display leading-tight">Welcome, ${u.name}</h1>
+              <p class="text-xs text-white/90 font-medium">${u.institute || u.organization || u.department || 'National Collaboration System'}</p>
+              ${role === 'student' ? `<p class="text-xs text-emerald-200">Target Role: <strong class="text-white underline decoration-emerald-400 decoration-2">${u.targetRole}</strong></p>` : ''}
+            </div>
+
+            <div class="flex flex-wrap gap-2 shrink-0">
+              ${role === 'student' ? `
+                <button onclick="navigateTo('assessment')" class="px-4 py-2.5 bg-white text-emerald-800 rounded-xl font-bold text-xs shadow-md hover:bg-slate-100 transition flex items-center gap-1.5">
+                  <i data-lucide="compass" class="w-4 h-4"></i> Take AI Diagnostic Quiz
+                </button>
+                <button onclick="navigateTo('profile-manager')" class="px-4 py-2.5 bg-emerald-700 hover:bg-emerald-600 text-white rounded-xl font-bold text-xs shadow-md transition flex items-center gap-1.5">
+                  <i data-lucide="award" class="w-4 h-4"></i> Manage Skills & Certs
+                </button>
+              ` : role === 'industry' ? `
+                <button onclick="openPostModal()" class="px-4 py-2.5 bg-white text-amber-900 rounded-xl font-bold text-xs shadow-md hover:bg-slate-100 transition flex items-center gap-1.5">
+                  <i data-lucide="plus-circle" class="w-4 h-4"></i> Post Opportunity
+                </button>
+              ` : `
+                <button onclick="navigateTo('compliance-export')" class="px-4 py-2.5 bg-white/20 hover:bg-white/30 text-white rounded-xl font-bold text-xs shadow-md transition flex items-center gap-1.5">
+                  <i data-lucide="file-spreadsheet" class="w-4 h-4"></i> NAAC / NIRF Exporter
+                </button>
+              `}
+            </div>
+          </div>
+
+          <!-- Opportunities Quick Explorer -->
+          ${renderOpportunitiesExplorer()}
+        </div>
+      `;
+    }
+
+    // 15-DOMAIN OPPORTUNITIES EXPLORER
+    function renderOpportunitiesExplorer() {
+      const domains = [
+        "ALL",
+        "Formulation & Analytical",
+        "Clinical Trials & GCP",
+        "Computational In-Silico",
+        "QA & Compliance",
+        "Herbal Cosmeceuticals",
+        "Nutraceuticals & Diet",
+        "Hospital Admin"
+      ];
+
+      const filtered = state.selectedDomainFilter === 'ALL'
+        ? state.opportunities
+        : state.opportunities.filter(o => o.domain === state.selectedDomainFilter);
+
+      return `
+        <div class="space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 class="text-lg font-bold font-display text-slate-900 dark:text-white">Specialized Industry Opportunities</h2>
+              <p class="text-xs text-slate-500">Live verified internships, research fellowships & corporate openings</p>
+            </div>
+            <span class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+              ${filtered.length} of ${state.opportunities.length} Postings
+            </span>
+          </div>
+
+          <!-- Domain Filter Horizontal Pills -->
+          <div class="flex items-center space-x-1.5 overflow-x-auto pb-2 custom-scrollbar">
+            ${domains.map(d => `
+              <button onclick="filterDomain('${d}')" class="px-3 py-1.5 rounded-xl font-bold text-xs whitespace-nowrap transition ${state.selectedDomainFilter === d ? 'bg-emerald-600 text-white shadow-sm' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'}">
+                ${d}
+              </button>
+            `).join('')}
+          </div>
+
+          <!-- Opportunities Cards Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            ${filtered.map(opp => `
+              <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between space-y-4 hover:border-emerald-500/50 transition">
+                <div class="space-y-2.5">
+                  <div class="flex items-center justify-between">
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300">${opp.domain}</span>
+                    <span class="text-xs font-extrabold text-emerald-600 dark:text-emerald-400">${opp.stipend}</span>
+                  </div>
+
+                  <h3 class="text-sm font-bold text-slate-900 dark:text-slate-100 leading-snug">${opp.title}</h3>
+                  <p class="text-xs font-semibold text-slate-600 dark:text-slate-400 flex items-center gap-1.5">
+                    <i data-lucide="building-2" class="w-3.5 h-3.5 text-slate-400"></i> ${opp.company}
+                  </p>
+
+                  <p class="text-[11px] text-slate-500 line-clamp-2 leading-relaxed">${opp.description}</p>
+
+                  <div class="flex flex-wrap gap-1 pt-1">
+                    ${opp.skills.map(s => `
+                      <span class="text-[9px] px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium">${s}</span>
+                    `).join('')}
+                  </div>
+                </div>
+
+                <button onclick="applyOpportunity('${opp.id}', '${opp.title}')" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-sm transition flex items-center justify-center gap-1.5">
+                  <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                  <span>1-Click Apply</span>
+                </button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function filterDomain(d) {
+      state.selectedDomainFilter = d;
+      render();
+    }
+
+    // STUDENT SKILLS & PROFILE CRUD MANAGER
+    function renderProfileManager() {
+      const u = state.currentUser;
+      return `
+        <div class="space-y-6 animate-in fade-in">
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <span class="text-xs font-bold px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300">Student Profile & Credentials Manager</span>
+              <h1 class="text-xl font-bold font-display text-slate-900 dark:text-white mt-1">Manage Skills, Blockchain Hashes & Capstones</h1>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="openSkillModal()" class="px-4 py-2 bg-emerald-600 text-white rounded-xl font-bold text-xs shadow-sm">+ Add Skill</button>
+              <button onclick="openCertModal()" class="px-4 py-2 bg-indigo-600 text-white rounded-xl font-bold text-xs shadow-sm">+ Add Certificate</button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Skills Card -->
+            <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+              <h3 class="text-base font-bold font-display">Competencies & Skill Scores</h3>
+              <div class="space-y-3">
+                ${(u.skills || []).map((s, idx) => `
+                  <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 flex items-center justify-between text-xs">
+                    <div>
+                      <p class="font-bold text-slate-900 dark:text-white">${s.name}</p>
+                      <span class="text-[10px] text-slate-400 font-semibold">${s.level} • ${s.verified ? '✓ Verified' : 'Self-Reported'}</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                      <span class="text-sm font-extrabold text-emerald-600">${s.score}%</span>
+                      <button onclick="deleteSkill(${idx})" class="text-slate-400 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <!-- Verified Certificates -->
+            <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+              <h3 class="text-base font-display font-bold">Cryptographic Certificates</h3>
+              <div class="space-y-3">
+                ${(u.certificates || []).map((c, idx) => `
+                  <div class="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-700 space-y-1.5 text-xs">
+                    <div class="flex items-center justify-between">
+                      <p class="font-bold text-slate-900 dark:text-white">${c.title}</p>
+                      <button onclick="deleteCert(${idx})" class="text-slate-400 hover:text-red-500"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                    </div>
+                    <p class="text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">${c.issuer}</p>
+                    <p class="text-[10px] font-mono text-slate-400 truncate bg-slate-100 dark:bg-slate-900 p-1 rounded">Hash: ${c.hash}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function deleteSkill(index) {
+      state.currentUser.skills.splice(index, 1);
+      saveState();
+      showToast("Skill Removed", "Skill removed from profile.", "info");
+      render();
+    }
+
+    function deleteCert(index) {
+      state.currentUser.certificates.splice(index, 1);
+      saveState();
+      showToast("Certificate Removed", "Certificate removed from ledger.", "info");
+      render();
+    }
+
+    // VERIFIABLE DIGITAL PORTFOLIO
+    function renderDigitalPortfolio() {
+      const u = state.currentUser;
+      return `
+        <div class="max-w-4xl mx-auto space-y-6 animate-in fade-in">
+          <div class="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 dark:border-slate-800 pb-6">
+              <div class="flex items-center space-x-4">
+                <img src="${u.avatar}" class="w-16 h-16 rounded-2xl object-cover border-2 border-emerald-500">
+                <div>
+                  <h2 class="text-xl font-bold font-display text-slate-900 dark:text-white">${u.name}</h2>
+                  <p class="text-xs text-slate-500">${u.institute}</p>
+                  <p class="text-xs font-bold text-emerald-600 mt-0.5">${u.targetRole}</p>
+                </div>
+              </div>
+              <button onclick="openQrProofModal()" class="px-4 py-2.5 bg-emerald-600 text-white rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-md">
+                <i data-lucide="qr-code" class="w-4 h-4"></i>
+                <span>View Blockchain Ledger Proof</span>
+              </button>
+            </div>
+
+            <!-- Skills List -->
+            <div class="space-y-3">
+              <h3 class="text-sm font-bold font-display uppercase tracking-wider text-slate-400">Verified Competencies</h3>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                ${(u.skills || []).map(s => `
+                  <div class="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 flex justify-between items-center text-xs">
+                    <span class="font-bold">${s.name}</span>
+                    <span class="font-extrabold text-emerald-600">${s.score}%</span>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function openQrProofModal() {
+      const u = state.currentUser;
+      const container = document.getElementById('modal-container');
+      container.classList.remove('hidden');
+      container.innerHTML = `
+        <div class="bg-white dark:bg-slate-900 max-w-md w-full rounded-3xl p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 text-center text-xs animate-in zoom-in-95">
+          <div class="flex justify-between items-center text-left border-b border-slate-100 dark:border-slate-800 pb-3">
+            <div>
+              <span class="text-[10px] font-bold text-emerald-600 uppercase">NATIONAL VERIFIABLE DIGITAL LEDGER</span>
+              <h3 class="text-sm font-bold text-slate-900 dark:text-white">Tamper-Proof Credential Hash</h3>
+            </div>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-4 h-4"></i></button>
+          </div>
+
+          <div class="p-4 bg-slate-50 dark:bg-slate-800 rounded-2xl flex justify-center">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fskillbridge.aiia.gov.in%2Fverify%2F${u.id}" class="w-40 h-40 rounded-xl shadow-sm">
+          </div>
+
+          <div class="text-left space-y-1 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl font-mono text-[10px] text-slate-500">
+            <p>Candidate: ${u.name} (${u.id})</p>
+            <p>Ledger Root Hash: 0x8f2d4e89a1c03b6e82f1b4a90cd7e51f</p>
+            <p>Consensus: Hyperledger Verified Fabric</p>
+          </div>
+
+          <button onclick="closeModal()" class="w-full py-2 bg-emerald-600 text-white font-bold rounded-xl">Close Verification</button>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    // DIAGNOSTIC QUIZ
+    function renderDiagnosticAssessment() {
+      return `
+        <div class="max-w-2xl mx-auto p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-6 text-xs animate-in fade-in">
+          <div>
+            <span class="text-xs font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-700">AI Competency Quiz</span>
+            <h2 class="text-xl font-bold font-display mt-1">Diagnostic Knowledge Assessment</h2>
+            <p class="text-slate-500">Answer 3 rapid technical questions to calibrate your gap closure roadmap.</p>
+          </div>
+
+          <div class="space-y-4">
+            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 space-y-2">
+              <p class="font-bold text-slate-800 dark:text-slate-200">1. Under Good Manufacturing Practices (Schedule T), what is the maximum permissible limit for lead (Pb) in finished polyherbal formulations?</p>
+              <div class="space-y-1">
+                <label class="flex items-center space-x-2"><input type="radio" name="q1"> <span>10 ppm (Permissible Standard)</span></label>
+                <label class="flex items-center space-x-2"><input type="radio" name="q1"> <span>50 ppm</span></label>
+              </div>
+            </div>
+
+            <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 space-y-2">
+              <p class="font-bold text-slate-800 dark:text-slate-200">2. In in-silico drug screening, what binding energy threshold typically indicates strong candidate ligand affinity?</p>
+              <div class="space-y-1">
+                <label class="flex items-center space-x-2"><input type="radio" name="q2"> <span>-7.0 kcal/mol or lower</span></label>
+                <label class="flex items-center space-x-2"><input type="radio" name="q2"> <span>+5.0 kcal/mol</span></label>
+              </div>
+            </div>
+          </div>
+
+          <button onclick="submitQuiz()" class="w-full py-3 bg-indigo-600 text-white font-bold rounded-xl shadow-md">Submit Assessment & Calibrate Radar</button>
+        </div>
+      `;
+    }
+
+    function submitQuiz() {
+      showToast("Quiz Complete!", "Diagnostic profile calibrated (+6% skill boost).");
+      confetti({ particleCount: 70, spread: 80 });
+      navigateTo('dashboard');
+    }
+
+    // NAAC / NIRF COMPLIANCE EXPORTER
+    function renderComplianceExporter() {
+      return `
+        <div class="space-y-6 animate-in fade-in text-xs">
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex justify-between items-center">
+            <div>
+              <span class="text-xs font-bold px-2 py-0.5 rounded bg-purple-100 text-purple-700">Accreditation Engine</span>
+              <h2 class="text-xl font-bold font-display mt-1">NAAC Criterion 5.2 & NIRF Compliance Exporter</h2>
+            </div>
+            <button onclick="exportCsv()" class="px-4 py-2 bg-emerald-600 text-white rounded-xl font-bold shadow-sm flex items-center gap-1.5">
+              <i data-lucide="download" class="w-4 h-4"></i> Download CSV Data
+            </button>
+          </div>
+
+          <div class="p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-xl space-y-4">
+            <h3 class="text-base font-bold font-display">Academic Year 2025-2026 Summary Metrics</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800"><p class="text-slate-400">Total Enrolled Scholars</p><p class="text-2xl font-bold text-emerald-600">14,253</p></div>
+              <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800"><p class="text-slate-400">Verified Internships</p><p class="text-2xl font-bold text-indigo-600">3,200</p></div>
+              <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800"><p class="text-slate-400">Active Industry MoUs</p><p class="text-2xl font-bold text-purple-600">142</p></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function exportCsv() {
+      showToast("CSV Downloaded", "NAAC_Criterion_5.2_Report.csv exported successfully.");
+    }
+
+    // USER PROVISIONING HUB
+    function renderUserManagement() {
+      return `
+        <div class="space-y-6 animate-in fade-in text-xs">
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex justify-between items-center">
+            <div>
+              <span class="text-xs font-bold px-2 py-0.5 rounded bg-red-100 text-red-700">National Provisioning</span>
+              <h2 class="text-xl font-bold font-display mt-1">Authorized User Accounts Roster</h2>
+            </div>
+          </div>
+
+          <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+            <table class="w-full text-left">
+              <thead class="bg-slate-100 dark:bg-slate-800 uppercase text-[10px] font-bold p-3">
+                <tr><th class="p-3">User</th><th class="p-3">Role</th><th class="p-3">Affiliation</th><th class="p-3">Status</th></tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                ${state.users.map(u => `
+                  <tr>
+                    <td class="p-3 font-bold">${u.name} (${u.email})</td>
+                    <td class="p-3 uppercase font-extrabold text-emerald-600">${u.role}</td>
+                    <td class="p-3 text-slate-500">${u.institute || u.organization || 'National'}</td>
+                    <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold text-[10px]">Active</span></td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+    }
+
+    // EXPERT LECTURES HUB
+    function renderExpertLectures() {
+      return `
+        <div class="space-y-6 animate-in fade-in text-xs">
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex justify-between items-center">
+            <div>
+              <span class="text-xs font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-700">Faculty Masterclasses</span>
+              <h2 class="text-xl font-bold font-display mt-1">Live Expert Masterclasses & Sessions</h2>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            ${state.lectures.map(l => `
+              <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+                <span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 font-bold text-[10px]">${l.date}</span>
+                <h3 class="text-sm font-bold text-slate-900 dark:text-white">${l.title}</h3>
+                <p class="text-slate-500">Speaker: ${l.speaker} (${l.designation})</p>
+                <button onclick="showToast('RSVP Confirmed', 'Join link dispatched.')" class="w-full py-2 bg-indigo-600 text-white rounded-xl font-bold">Join Live Session</button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // FACULTY SABBATICALS
+    function renderFacultyInternships() {
+      return `
+        <div class="space-y-6 animate-in fade-in text-xs">
+          <div class="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm flex justify-between items-center">
+            <div>
+              <span class="text-xs font-bold px-2 py-0.5 rounded bg-indigo-100 text-indigo-700">Corporate Residencies</span>
+              <h2 class="text-xl font-bold font-display mt-1">Faculty Sabbaticals & Research Fellowships</h2>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            ${state.sabbaticals.map(s => `
+              <div class="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-3">
+                <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">${s.fellowship}</span>
+                <h3 class="text-sm font-bold text-slate-900 dark:text-white">${s.title}</h3>
+                <p class="text-slate-500">${s.company} • ${s.location} (${s.duration})</p>
+                <button onclick="showToast('Nomination Dispatched', 'Applied for sabbatical.')" class="w-full py-2 bg-emerald-600 text-white rounded-xl font-bold">Apply for Residency</button>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 6. AUTH & MODAL ACTIONS
+    // =========================================================================
+    function renderAuthView() {
+      return `
+        <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center py-6 animate-in fade-in duration-300">
+          <div class="lg:col-span-5 space-y-6">
+            <div class="space-y-3">
+              <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-xs font-bold border border-emerald-300 dark:border-emerald-800">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                <span>Centralized Academia–Industry Portal</span>
+              </div>
+              <h1 class="text-4xl font-extrabold font-display text-slate-900 dark:text-white leading-tight">
+                SkillSetu <span class="text-emerald-600 dark:text-emerald-400">Portal</span>
+              </h1>
+              <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                A unified intelligent platform connecting <strong>Students</strong>, <strong>Faculty</strong>, <strong>Industries</strong>, and <strong>Institutions</strong> for skill mapping, internships, R&D collaboration, and automated placement tracking.
+              </p>
+            </div>
+
+            <div class="space-y-3">
+              <div class="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-start space-x-3 shadow-sm">
+                <div class="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="compass" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900 dark:text-slate-100">AI Skill Radar & Diagnostic Quiz</h4>
+                  <p class="text-[11px] text-slate-500">Real-time competency profiling and gap closure roadmap.</p>
+                </div>
+              </div>
+
+              <div class="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-start space-x-3 shadow-sm">
+                <div class="w-9 h-9 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="book-open" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900 dark:text-slate-100">Faculty Sabbaticals & Masterclasses</h4>
+                  <p class="text-[11px] text-slate-500">Corporate residencies, workshops, and joint research grants.</p>
+                </div>
+              </div>
+
+              <div class="p-3 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 flex items-start space-x-3 shadow-sm">
+                <div class="w-9 h-9 rounded-xl bg-purple-100 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="award" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <h4 class="text-xs font-bold text-slate-900 dark:text-slate-100">15 Specialized Domains & NAAC/NIRF</h4>
+                  <p class="text-[11px] text-slate-500">Blockchain credentials & 1-click accreditation reports.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-7">
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-2xl p-6 sm:p-8 space-y-6">
+              <div>
+                <h2 class="text-xl font-bold font-display text-slate-900 dark:text-white">Unified Portal Sign In</h2>
+                <p class="text-xs text-slate-500">Sign in with email or select an instant 1-click demo persona below.</p>
+              </div>
+
+              <form onsubmit="handleAuthSubmit(event)" class="space-y-4 text-xs">
+                <div>
+                  <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Email Address:</label>
+                  <input type="email" id="auth-email" required placeholder="e.g. student@aiia.gov.in / faculty@aiia.gov.in" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                </div>
+
+                <div>
+                  <label class="font-bold text-slate-700 dark:text-slate-300 block mb-1">Password:</label>
+                  <input type="password" id="auth-password" required placeholder="••••••••" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold text-xs shadow-md shadow-emerald-600/30 transition flex items-center justify-center gap-2">
+                  <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                  <span>Sign In to Portal</span>
+                </button>
+              </form>
+
+              <div class="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">⚡ Instant 1-Click Role Logins:</span>
+                  <span class="text-[10px] text-slate-400">Select any role</span>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                  <button onclick="quickDemoLogin('student')" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 hover:border-emerald-500 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 text-left transition flex items-center space-x-2.5">
+                    <i data-lucide="graduation-cap" class="w-4 h-4 text-emerald-600 shrink-0"></i>
+                    <div class="truncate"><p class="font-bold">Student / Scholar</p><p class="text-[10px] text-slate-500">student@aiia.gov.in</p></div>
+                  </button>
+                  <button onclick="quickDemoLogin('faculty')" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 hover:border-indigo-500 hover:bg-indigo-50/50 dark:hover:bg-indigo-950/30 text-left transition flex items-center space-x-2.5">
+                    <i data-lucide="user-check" class="w-4 h-4 text-indigo-600 shrink-0"></i>
+                    <div class="truncate"><p class="font-bold">Faculty Member</p><p class="text-[10px] text-slate-500">faculty@aiia.gov.in</p></div>
+                  </button>
+                  <button onclick="quickDemoLogin('industry')" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 hover:border-amber-500 hover:bg-amber-50/50 dark:hover:bg-amber-950/30 text-left transition flex items-center space-x-2.5">
+                    <i data-lucide="building-2" class="w-4 h-4 text-amber-600 shrink-0"></i>
+                    <div class="truncate"><p class="font-bold">Industry Partner</p><p class="text-[10px] text-slate-500">recruitment@dabur-rnd.com</p></div>
+                  </button>
+                  <button onclick="quickDemoLogin('institution')" class="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 hover:border-purple-500 hover:bg-purple-50/50 dark:hover:bg-purple-950/30 text-left transition flex items-center space-x-2.5">
+                    <i data-lucide="landmark" class="w-4 h-4 text-purple-600 shrink-0"></i>
+                    <div class="truncate"><p class="font-bold">Institution / TPO</p><p class="text-[10px] text-slate-500">tpo@aiia.gov.in</p></div>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function handleAuthSubmit(e) {
+      e.preventDefault();
+      loginUser(document.getElementById('auth-email').value, document.getElementById('auth-password').value);
+    }
+
+    function applyOpportunity(id, title) {
+      state.applications.push({ id, title, appliedAt: new Date().toISOString().split('T')[0] });
+      saveState();
+      showToast("Application Submitted!", `Profile dispatched for "${title}".`);
+      confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+      render();
+    }
+
+    function openSkillModal() {
+      const container = document.getElementById('modal-container');
+      container.classList.remove('hidden');
+      container.innerHTML = `
+        <div class="bg-white dark:bg-slate-900 max-w-md w-full rounded-3xl p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 text-xs animate-in zoom-in-95">
+          <div class="flex justify-between items-center"><h3 class="text-base font-bold font-display">Add Skill</h3><button onclick="closeModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+          <form onsubmit="handleSkillAdd(event)" class="space-y-3">
+            <div><label class="font-bold block mb-1">Skill Name:</label><input type="text" id="modal-skill-name" required placeholder="e.g. In-Silico Molecular Docking" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl"></div>
+            <div><label class="font-bold block mb-1">Score (1-100%):</label><input type="number" id="modal-skill-score" min="10" max="100" value="85" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl"></div>
+            <button type="submit" class="w-full py-2.5 bg-emerald-600 text-white rounded-xl font-bold">Save Skill</button>
+          </form>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function handleSkillAdd(e) {
+      e.preventDefault();
+      const name = document.getElementById('modal-skill-name').value;
+      const score = parseInt(document.getElementById('modal-skill-score').value);
+      state.currentUser.skills = state.currentUser.skills || [];
+      state.currentUser.skills.push({ name, score, level: score > 80 ? 'Advanced' : 'Intermediate', verified: false });
+      saveState();
+      closeModal();
+      showToast("Skill Added", `"${name}" added.`);
+      render();
+    }
+
+    function openCertModal() {
+      const container = document.getElementById('modal-container');
+      container.classList.remove('hidden');
+      container.innerHTML = `
+        <div class="bg-white dark:bg-slate-900 max-w-md w-full rounded-3xl p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 text-xs animate-in zoom-in-95">
+          <div class="flex justify-between items-center"><h3 class="text-base font-bold font-display">Add Certificate</h3><button onclick="closeModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+          <form onsubmit="handleCertAdd(event)" class="space-y-3">
+            <div><label class="font-bold block mb-1">Certificate Title:</label><input type="text" id="modal-cert-title" required placeholder="e.g. Good Clinical Practice (GCP)" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl"></div>
+            <div><label class="font-bold block mb-1">Issuing Body:</label><input type="text" id="modal-cert-issuer" required value="AIIA National Certification Board" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl"></div>
+            <button type="submit" class="w-full py-2.5 bg-emerald-600 text-white rounded-xl font-bold">Generate Hash & Save</button>
+          </form>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function handleCertAdd(e) {
+      e.preventDefault();
+      const title = document.getElementById('modal-cert-title').value;
+      const issuer = document.getElementById('modal-cert-issuer').value;
+      const hash = '0x' + Array.from(crypto.getRandomValues(new Uint8Array(16))).map(b => b.toString(16).padStart(2, '0')).join('');
+      state.currentUser.certificates = state.currentUser.certificates || [];
+      state.currentUser.certificates.unshift({ title, issuer, date: 'Oct 2026', hash, verified: true });
+      saveState();
+      closeModal();
+      showToast("Certificate Verified", `Added with hash ${hash.slice(0, 10)}...`);
+      render();
+    }
+
+    function openPostModal() {
+      const container = document.getElementById('modal-container');
+      container.classList.remove('hidden');
+      container.innerHTML = `
+        <div class="bg-white dark:bg-slate-900 max-w-md w-full rounded-3xl p-6 shadow-2xl border border-slate-200 dark:border-slate-800 space-y-4 text-xs animate-in zoom-in-95">
+          <div class="flex justify-between items-center"><h3 class="text-base font-bold font-display">Post Opportunity</h3><button onclick="closeModal()"><i data-lucide="x" class="w-4 h-4"></i></button></div>
+          <form onsubmit="handlePostAdd(event)" class="space-y-3">
+            <div><label class="font-bold block mb-1">Title:</label><input type="text" id="modal-p-title" required placeholder="e.g. Clinical Trial Analyst" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl"></div>
+            <div><label class="font-bold block mb-1">Domain:</label><input type="text" id="modal-p-domain" required value="Clinical Trials & GCP" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl"></div>
+            <div><label class="font-bold block mb-1">Stipend:</label><input type="text" id="modal-p-stipend" required value="₹30,000 / month" class="w-full p-2.5 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl"></div>
+            <button type="submit" class="w-full py-2.5 bg-amber-600 text-white rounded-xl font-bold">Publish Opening</button>
+          </form>
+        </div>
+      `;
+      lucide.createIcons();
+    }
+
+    function handlePostAdd(e) {
+      e.preventDefault();
+      const title = document.getElementById('modal-p-title').value;
+      const domain = document.getElementById('modal-p-domain').value;
+      const stipend = document.getElementById('modal-p-stipend').value;
+      state.opportunities.unshift({
+        id: `OPP-${Date.now().toString().slice(-4)}`,
+        title,
+        company: state.currentUser.name,
+        domain,
+        stipend,
+        description: "Direct industry opening posted via corporate recruiter portal.",
+        skills: ["Clinical Protocols", "Regulatory Auditing"]
+      });
+      saveState();
+      closeModal();
+      showToast("Opportunity Published!", `"${title}" is now open.`);
+      render();
+    }
+
+    function closeModal() {
+      document.getElementById('modal-container').classList.add('hidden');
+    }
+
+    function getRoleGradient(role) {
+      switch(role) {
+        case 'student': return 'from-emerald-800 via-teal-800 to-slate-900';
+        case 'faculty': return 'from-indigo-800 via-blue-900 to-slate-900';
+        case 'industry': return 'from-amber-800 via-orange-900 to-slate-900';
+        case 'institution': return 'from-purple-800 via-indigo-950 to-slate-900';
+        default: return 'from-red-900 via-slate-900 to-emerald-950';
+      }
+    }
+
+    // Render Initial State on Load
+    render();
+  </script>
+</body>
 </html>
